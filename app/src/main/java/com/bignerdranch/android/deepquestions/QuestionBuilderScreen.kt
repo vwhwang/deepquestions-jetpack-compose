@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 
 @Composable
@@ -27,23 +28,29 @@ fun QuestionBuilderScreen(
         Question(R.string.question9, false),
         Question(R.string.question10, false),
     )
+    val randomQuestion = stringResource(id = questions.random().questionName)
     Column() {
         Button(
-            onClick = {navController.navigate(Screen.DetailScreen.route)}) {
-            Text(text = "One Question at a time!")
+            onClick = { navController.navigate(Screen.DetailScreen.withArgs(randomQuestion)) }) {
+            Text(text = "Pick a Random Question!")
         }
         LazyColumn() {
             item() {
                 Text(
+                    textAlign = TextAlign.Center,
                     text = "list of questions ",
                     style = MaterialTheme.typography.titleLarge
                 )
             }
             item {
                 questions.forEach {
+                    val questionDescription = stringResource(id = it.questionName)
                     QuestionCell(
                         text = stringResource(id = it.questionName),
-                        onClickQuestion = {})
+                        onClickQuestion = {
+                            navController.navigate(Screen.DetailScreen.withArgs(questionDescription))
+                        }
+                    )
                 }
             }
         }
